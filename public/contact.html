@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Ashmil Homes – Premium Real Estate in Lagos</title>
+  <meta name="description" content="Reach out to Ashmil Homes for property enquiries, site inspections, or consultations. Visit our office in Ikorodu or call us.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Manrope', sans-serif; background: #f8fafc; }
+    h1, h2, h3, .font-serif { font-family: 'Fraunces', serif; }
+    .bg-navy { background-color: #0A1A2F; }
+    .bg-navy-deep { background-color: #051020; }
+    .text-gold { color: #D4AF37; }
+    .gradient-gold { background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); }
+    .whatsapp-float { position: fixed; bottom: 20px; right: 20px; background: #25D366; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; transition: transform 0.3s ease; }
+    .whatsapp-float:hover { transform: scale(1.1); }
+    .whatsapp-float img { width: 35px; height: 35px; }
+    @media (max-width: 768px) { .whatsapp-float { width: 50px; height: 50px; bottom: 15px; right: 15px; } .whatsapp-float img { width: 28px; height: 28px; } }
+  </style>
+</head>
+<body>
+
+<header class="bg-navy text-white sticky top-0 z-50 shadow-md">
+  <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <a href="/" class="flex items-center gap-2">
+      <img src="https://hotgistloaded.com.ng/wp-content/uploads/2026/05/logo-ashmil-DAwsa8ai.jpg" alt="Ashmil Homes Logo" class="w-10 h-10 rounded-full ring-2 ring-gold/60">
+      <span class="font-serif font-bold text-lg hidden sm:inline">Ashmil Homes</span>
+    </a>
+    <nav class="hidden md:flex gap-6 text-sm font-medium">
+      <a href="/" class="hover:text-gold transition">Home</a>
+      <a href="/properties.html" class="hover:text-gold transition">Properties</a>
+      <a href="/about.html" class="hover:text-gold transition">About</a>
+      <a href="/contact.html" class="text-gold">Contact</a>
+    </nav>
+    <button class="md:hidden text-white text-2xl">☰</button>
+  </div>
+</header>
+
+<main class="container mx-auto px-4 py-12">
+  <div class="text-center mb-8">
+    <h1 class="text-4xl md:text-5xl font-serif font-bold text-navy">Get in Touch</h1>
+    <div class="w-24 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+    <p class="text-gray-500 mt-3 text-sm">We're here to help with your real estate needs</p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- Left Column: Address, Map, Contact -->
+    <div>
+      <div class="bg-white p-6 rounded-2xl shadow-md mb-6">
+        <h3 class="font-serif text-xl font-bold mb-3 text-navy">📍 Visit Us</h3>
+        <p class="text-gray-600 text-sm">10 Unilag Estate Main Road, Igboken, Igbe, Ikorodu, Lagos State</p>
+        <div class="mt-4 overflow-hidden rounded-xl shadow-sm">
+          <!-- Google Map Embed using your Place ID from GMB -->
+          <iframe 
+            width="100%" 
+            height="280" 
+            style="border:0; border-radius: 0.75rem;" 
+            loading="lazy" 
+            allowfullscreen 
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=place_id:ChIJlaVWU4jv6xIRJkTDYjJSpak">
+          </iframe>
+        </div>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-md">
+        <h3 class="font-serif text-xl font-bold mb-3 text-navy">📞 Contact Info</h3>
+        <div class="space-y-2 text-gray-600 text-sm">
+          <p>📞 0707 440 4637</p>
+          <p>📞 0902 396 7106</p>
+          <p>✉️ <a href="mailto:Ashmilhomesnigerialimited@gmail.com" class="text-gold hover:underline">Ashmilhomesnigerialimited@gmail.com</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Contact Form -->
+    <div class="bg-white p-6 rounded-2xl shadow-md">
+      <h3 class="font-serif text-xl font-bold mb-4 text-navy">Send a Message</h3>
+      <form id="contactForm" class="space-y-4">
+        <input type="text" name="name" placeholder="Full name" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-gold focus:border-transparent">
+        <input type="email" name="email" placeholder="Email" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-gold focus:border-transparent">
+        <input type="tel" name="phone" placeholder="Phone" class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-gold focus:border-transparent">
+        <textarea name="message" rows="4" placeholder="Your message" required class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-gold focus:border-transparent"></textarea>
+        <button type="submit" class="gradient-gold w-full py-3 rounded-lg font-semibold text-navy text-sm shadow hover:shadow-md transition">Send Enquiry</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer class="bg-navy-deep text-white mt-12">
+  <div class="container mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+    <div><img src="https://hotgistloaded.com.ng/wp-content/uploads/2026/05/logo-ashmil-DAwsa8ai.jpg" class="w-14 h-14 rounded-full ring-2 ring-gold/60 mb-4"><h3 class="font-serif text-xl font-bold mb-2">Ashmil Homes</h3><p class="text-white/70">Turning property dreams into reality across Lagos.</p></div>
+    <div><h4 class="font-serif text-gold text-lg mb-4">Quick Links</h4><ul class="space-y-2"><li><a href="/" class="hover:text-gold transition">Home</a></li><li><a href="/properties.html" class="hover:text-gold transition">Properties</a></li><li><a href="/about.html" class="hover:text-gold transition">About Us</a></li><li><a href="/contact.html" class="hover:text-gold transition">Contact</a></li></ul></div>
+    <div><h4 class="font-serif text-gold text-lg mb-4">Categories</h4><ul class="space-y-2"><li><a href="/properties.html?category=houses" class="hover:text-gold transition"> Houses for Sale</a></li><li><a href="/properties.html?category=land" class="hover:text-gold transition"> Land for Sale</a></li><li><a href="/properties.html?category=shortlets" class="hover:text-gold transition"> Shortlets</a></li><li><a href="/properties.html?category=flats" class="hover:text-gold transition"> Flats & Apartments</a></li></ul></div>
+    <div><h4 class="font-serif text-gold text-lg mb-4">Get In Touch</h4><ul class="space-y-2"><li>📍 10 Unilag Estate, Ikorodu, Lagos</li><li>📞 0707 440 4637, 0902 396 7106</li><li>✉️ Ashmilhomesnigerialimited@gmail.com</li></ul></div>
+  </div>
+  <div class="border-t border-white/10 py-4 text-center text-xs text-white/60">© 2026 Ashmil Homes Nigeria Limited | <a href="/admin/login.html" class="hover:text-gold">Admin Login</a></div>
+</footer>
+
+<a href="https://wa.me/2347074404637?text=Hello%20Ashmil%20Homes%2C%20I'm%20interested%20in%20one%20of%20your%20properties" target="_blank" class="whatsapp-float"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"></a>
+
+<script>
+  document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target));
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      alert(result.success ? 'Message sent! We will get back to you soon.' : 'Error, please try again.');
+      if (result.success) e.target.reset();
+    } catch (err) {
+      alert('Network error. Please try again later.');
+    }
+  });
+</script>
+</body>
+</html>

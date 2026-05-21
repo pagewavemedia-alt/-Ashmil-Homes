@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – Ashmil Homes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Manrope', sans-serif; background: #f1f5f9; }
+    .card { transition: transform 0.2s, box-shadow 0.2s; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+    .gradient-gold { background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+<div class="container mx-auto px-4 py-8">
+  <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+    <div class="flex items-center gap-3 bg-white rounded-full shadow-md px-5 py-2">
+      <img src="https://hotgistloaded.com.ng/wp-content/uploads/2026/05/logo-ashmil-DAwsa8ai.jpg" alt="Ashmil Homes" class="w-12 h-12 rounded-full ring-2 ring-gold/60">
+      <div><h1 class="font-serif text-2xl font-bold text-navy">Ashmil Homes</h1><p class="text-xs text-gray-500">Property Management Dashboard</p></div>
+    </div>
+    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full shadow transition">🚪 Logout</button>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 card">
+    <h2 class="text-2xl font-semibold mb-5 border-b pb-2 flex items-center gap-2">📝 <span>Add / Edit Property</span></h2>
+    <form id="propertyForm" enctype="multipart/form-data" class="grid md:grid-cols-2 gap-5">
+      <input type="hidden" id="propertyId">
+      <div><label class="block text-sm font-medium mb-1">Title *</label><input type="text" id="title" required class="w-full border border-gray-300 rounded-lg p-2"></div>
+      <div><label class="block text-sm font-medium mb-1">Price *</label><input type="text" id="price" required class="w-full border border-gray-300 rounded-lg p-2"></div>
+      <div><label class="block text-sm font-medium mb-1">Location *</label><input type="text" id="location" required class="w-full border border-gray-300 rounded-lg p-2"></div>
+      <div><label class="block text-sm font-medium mb-1">Category *</label><select id="category" required class="w-full border border-gray-300 rounded-lg p-2"><option value="houses">🏡 Houses for Sale</option><option value="land">🌾 Land for Sale</option><option value="shortlets">🏨 Shortlets</option><option value="flats">🏢 Flats & Apartments</option></select></div>
+      <div class="md:col-span-2"><label class="block text-sm font-medium mb-1">Description *</label><textarea id="description" rows="3" required class="w-full border border-gray-300 rounded-lg p-2"></textarea></div>
+      <div><label class="block text-sm font-medium mb-1">Bedrooms</label><input type="number" id="bedrooms" class="w-full border border-gray-300 rounded-lg p-2"></div>
+      <div><label class="block text-sm font-medium mb-1">Bathrooms</label><input type="number" id="bathrooms" class="w-full border border-gray-300 rounded-lg p-2"></div>
+      <div><label class="block text-sm font-medium mb-1">Area (sq ft)</label><input type="text" id="area" class="w-full border border-gray-300 rounded-lg p-2"></div>
+      <div class="flex items-center gap-3"><label class="flex items-center gap-2"><input type="checkbox" id="featured"> <span>⭐ Featured Property</span></label></div>
+      <div class="md:col-span-2"><label class="block text-sm font-medium mb-1">Property Images (JPEG/PNG)</label><input type="file" id="images" multiple accept="image/*" class="w-full border border-gray-300 rounded-lg p-2" onchange="previewImages(this)"><div id="imagePreview" class="flex flex-wrap gap-2 mt-2"></div></div>
+      <div class="md:col-span-2 flex gap-4"><button type="submit" class="gradient-gold text-navy px-6 py-2 rounded-lg font-semibold shadow hover:shadow-md transition">💾 Save Property</button><button type="button" onclick="resetForm()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg transition">Cancel</button></div>
+    </form>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-lg p-6 card">
+    <h2 class="text-2xl font-semibold mb-5 border-b pb-2">📋 All Properties</h2>
+    <div id="propertyList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </div>
+</div>
+
+<script>
+  const token = localStorage.getItem('adminToken');
+  if (!token) window.location.href = '/admin/login.html';
+
+  function previewImages(input) {
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = '';
+    if (input.files) {
+      Array.from(input.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'w-16 h-16 object-cover rounded border';
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+
+  async function apiCall(url, options = {}) {
+    const res = await fetch(url, { ...options, headers: { 'Authorization': `Bearer ${token}`, ...options.headers } });
+    if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href = '/admin/login.html'; }
+    return res.json();
+  }
+
+  async function loadProperties() {
+    try {
+      const props = await apiCall('/api/admin/properties');
+      const container = document.getElementById('propertyList');
+      if (!props.length) { container.innerHTML = '<p class="col-span-full text-center text-gray-500">No properties yet. Add your first one above!</p>'; return; }
+      container.innerHTML = props.map(p => `
+        <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition bg-white">
+          <img src="${p.images?.[0] || 'https://via.placeholder.com/400x300?text=No+Image'}" class="w-full h-44 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+          <div class="p-3"><h3 class="font-bold text-lg">${escapeHtml(p.title)}</h3><p class="text-gold font-semibold">₦${p.price}</p><p class="text-gray-500 text-sm">${escapeHtml(p.location)}</p><div class="flex justify-between mt-3"><button onclick="editProperty('${p._id}')" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-md text-sm hover:bg-blue-200">✏️ Edit</button><button onclick="deleteProperty('${p._id}')" class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-sm hover:bg-red-200">🗑️ Delete</button></div></div>
+        </div>
+      `).join('');
+    } catch(err) { console.error(err); }
+  }
+
+  function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+
+  document.getElementById('propertyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('propertyId').value;
+    const formData = new FormData();
+    formData.append('title', document.getElementById('title').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('price', document.getElementById('price').value);
+    formData.append('location', document.getElementById('location').value);
+    formData.append('category', document.getElementById('category').value);
+    formData.append('bedrooms', document.getElementById('bedrooms').value || 0);
+    formData.append('bathrooms', document.getElementById('bathrooms').value || 0);
+    formData.append('area', document.getElementById('area').value || '');
+    formData.append('featured', document.getElementById('featured').checked);
+    const images = document.getElementById('images').files;
+    for (let i = 0; i < images.length; i++) formData.append('images', images[i]);
+
+    const url = id ? `/api/admin/properties/${id}` : '/api/admin/properties';
+    const method = id ? 'PUT' : 'POST';
+    try {
+      const res = await fetch(url, { method, headers: { 'Authorization': `Bearer ${token}` }, body: formData });
+      if (res.ok) { alert('Property saved successfully!'); resetForm(); loadProperties(); } else { const err = await res.text(); alert('Error: ' + err); }
+    } catch (err) { alert('Network error: ' + err.message); }
+  });
+
+  async function editProperty(id) {
+    try {
+      const p = await apiCall(`/api/properties/${id}`);
+      document.getElementById('propertyId').value = p._id;
+      document.getElementById('title').value = p.title;
+      document.getElementById('description').value = p.description;
+      document.getElementById('price').value = p.price;
+      document.getElementById('location').value = p.location;
+      document.getElementById('category').value = p.category;
+      document.getElementById('bedrooms').value = p.bedrooms;
+      document.getElementById('bathrooms').value = p.bathrooms;
+      document.getElementById('area').value = p.area;
+      document.getElementById('featured').checked = p.featured;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) { alert('Error loading property for edit'); }
+  }
+
+  async function deleteProperty(id) {
+    if (confirm('Delete this property permanently?')) {
+      await fetch(`/api/admin/properties/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+      loadProperties();
+    }
+  }
+
+  function resetForm() { document.getElementById('propertyForm').reset(); document.getElementById('propertyId').value = ''; document.getElementById('imagePreview').innerHTML = ''; }
+  function logout() { localStorage.removeItem('adminToken'); window.location.href = '/admin/login.html'; }
+  loadProperties();
+</script>
+</body>
+</html>
