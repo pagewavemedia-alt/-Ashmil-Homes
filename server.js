@@ -84,6 +84,46 @@ app.get('/api/test', (req, res) => {
   });
 });
 
+// ========== SITEMAP & ROBOTS.TXT (SEO) ==========
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const Property = require('./models/Property');
+    const properties = await Property.find({}, '_id').lean();
+
+    const baseUrl = 'https://www.ashmilhomes.com.ng';
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+    // Static pages
+    const staticPages = [
+      { url: '/', priority: '1.0', changefreq: 'daily' },
+      { url: '/properties.html', priority: '0.9', changefreq: 'daily' },
+      { url: '/about.html', priority: '0.7', changefreq: 'monthly' },
+      { url: '/contact.html', priority: '0.7', changefreq: 'monthly' },
+    ];
+    staticPages.forEach(page => {
+      xml += `  <url>\n    <loc>${baseUrl}${page.url}</loc>\n    <priority>${page.priority}</priority>\n    <changefreq>${page.changefreq}</changefreq>\n  </url>\n`;
+    });
+
+    // Dynamic property pages
+    for (const prop of properties) {
+      xml += `  <url>\n    <loc>${baseUrl}/property-details.html?id=${prop._id}</loc>\n    <priority>0.8</priority>\n    <changefreq>weekly</changefreq>\n  </url>\n`;
+    }
+
+    xml += '</urlset>';
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+  } catch (err) {
+    console.error('Sitemap error:', err);
+    res.status(500).send('Error generating sitemap');
+  }
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.send(`User-agent: *\nAllow: /\nSitemap: https://www.ashmilhomes.com.ng/sitemap.xml`);
+});
+
 // ========== 404 HANDLER ==========
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
